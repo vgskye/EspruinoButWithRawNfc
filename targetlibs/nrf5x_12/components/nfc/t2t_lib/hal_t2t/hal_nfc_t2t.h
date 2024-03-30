@@ -76,6 +76,8 @@ typedef enum {
                                             To use default NFCID1 pass one byte containing a 7.
                                             This parameter can be set before nfc_t2t_setup() to set initial NFCID1. */
     HAL_NFC_PARAM_ID_INTERNAL,        ///<  Get internal bytes, replaces nfc_t2t_internal_set()
+    HAL_NFC_PARAM_ID_SELRES,
+    HAL_NFC_PARAM_ID_SENSRES,
     HAL_NFC_PARAM_ID_UNKNOWN
 } hal_nfc_param_id_t;
 

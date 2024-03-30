@@ -158,6 +158,12 @@ static volatile bool                m_slp_req_received                    = fals
 static volatile bool                m_field_on                            = false;                /**< Flag indicating that NFC Tag field is present */
 static nrf_drv_clock_handler_item_t m_clock_handler_item;                                         /**< Clock event handler item structure */
 
+
+static uint16_t sensres =
+        (NFCT_SENSRES_NFCIDSIZE_NFCID1Double << NFCT_SENSRES_NFCIDSIZE_Pos) |
+        (NFCT_SENSRES_BITFRAMESDD_SDD00100   << NFCT_SENSRES_BITFRAMESDD_Pos);
+static uint8_t  selres = 0;
+
 #ifndef HAL_NFC_ENGINEERING_BC_FTPAN_WORKAROUND
     static volatile uint32_t        m_nfc_fieldpresent_mask               = NFC_FIELD_OFF_MASK;   /**< Mask used for NFC Field polling in NFCT_FIELDPRESENT register */
 #endif // HAL_NFC_ENGINEERING_BC_FTPAN_WORKAROUND
@@ -280,9 +286,8 @@ static inline void hal_nfc_common_hw_setup(uint8_t * const nfc_internal)
     /* Begin: Bugfix for FTPAN-25 (IC-9929) */
     /* Workaround for wrong SENSRES values require using SDD00001, but here SDD00100 is used
        because it's required to operate with Windows Phone */
-    NRF_NFCT->SENSRES =
-            (NFCT_SENSRES_NFCIDSIZE_NFCID1Double << NFCT_SENSRES_NFCIDSIZE_Pos) |
-            (NFCT_SENSRES_BITFRAMESDD_SDD00100   << NFCT_SENSRES_BITFRAMESDD_Pos);
+    NRF_NFCT->SENSRES = sensres;
+    NRF_NFCT->SELRES = selres;
     /* End:   Bugfix for FTPAN-25 (IC-9929)*/
 }
 
@@ -451,6 +456,26 @@ ret_code_t hal_nfc_parameter_set(hal_nfc_param_id_t id, const void * p_data, siz
             {
                 memset((void *)m_nfc_uid, '\0', NFC_UID_SIZE);
             } 
+            else
+            {
+                return NRF_ERROR_INVALID_LENGTH;
+            } 
+            break;
+        case HAL_NFC_PARAM_ID_SELRES:
+            if(data_length == 1)
+            {
+                selres = *((uint8_t*) p_data);
+            }
+            else
+            {
+                return NRF_ERROR_INVALID_LENGTH;
+            } 
+            break;
+        case HAL_NFC_PARAM_ID_SENSRES:
+            if(data_length == 2)
+            {
+                sensres = *((uint16_t*) p_data);
+            }
             else
             {
                 return NRF_ERROR_INVALID_LENGTH;

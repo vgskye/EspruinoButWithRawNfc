@@ -3310,6 +3310,22 @@ void jsble_nfc_stop() {
   hal_nfc_done();
 }
 
+void jsble_nfc_set_atqa(uint16_t data) {
+  uint32_t ret_val;
+  ret_val = hal_nfc_parameter_set(HAL_NFC_PARAM_ID_SENSRES, &data, 2);
+  if (ret_val)
+    return jsExceptionHere(JSET_ERROR, "nfcSetSAK: Got NFC error code %d", ret_val);
+  // NRF_NFCT->SENSRES = data;
+}
+
+void jsble_nfc_set_sak(uint8_t data) {
+  uint32_t ret_val;
+  ret_val = hal_nfc_parameter_set(HAL_NFC_PARAM_ID_SELRES, &data, 1);
+  if (ret_val)
+    return jsExceptionHere(JSET_ERROR, "nfcSetSAK: Got NFC error code %d", ret_val);
+  // NRF_NFCT->SELRES = data;
+}
+
 void jsble_nfc_get_internal(uint8_t *data, size_t *max_len) {
 
   uint32_t ret_val;

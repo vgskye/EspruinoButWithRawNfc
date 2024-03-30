@@ -2635,6 +2635,60 @@ void jswrap_nfc_raw(JsVar *payload) {
 /*JSON{
     "type" : "staticmethod",
     "class" : "NRF",
+    "name" : "nfcSetATQA",
+    "#if" : "defined(NRF52_SERIES) && defined(USE_NFC)",
+    "generate" : "jswrap_nfc_set_atqa",
+    "params" : [
+      ["payload","int","The two-byte ATQA value"]
+    ]
+}
+**Advanced NFC Functionality.** If you just want to advertise a URL, use
+`NRF.nfcURL` instead.
+
+Sets the ATQA value for the emulated tag.
+*/
+void jswrap_nfc_set_atqa(JsVarInt payload) {
+#ifdef USE_NFC
+  if (payload < 0 || payload > 65535)
+  {
+    jsExceptionHere(JSET_ERROR, "ATQA not a two byte integer");
+    return;
+  }
+
+  jsble_nfc_set_atqa(payload);
+#endif
+}
+
+/*JSON{
+    "type" : "staticmethod",
+    "class" : "NRF",
+    "name" : "nfcSetSAK",
+    "#if" : "defined(NRF52_SERIES) && defined(USE_NFC)",
+    "generate" : "jswrap_nfc_set_sak",
+    "params" : [
+      ["payload","int","The one-byte SAK value"]
+    ]
+}
+**Advanced NFC Functionality.** If you just want to advertise a URL, use
+`NRF.nfcURL` instead.
+
+Sets the SAK value for the emulated tag.
+*/
+void jswrap_nfc_set_sak(JsVarInt payload) {
+#ifdef USE_NFC
+  if (payload < 0 || payload > 255)
+  {
+    jsExceptionHere(JSET_ERROR, "SAK not a single byte integer");
+    return;
+  }
+
+  jsble_nfc_set_sak(payload);
+#endif
+}
+
+/*JSON{
+    "type" : "staticmethod",
+    "class" : "NRF",
     "name" : "nfcStart",
     "#if" : "defined(NRF52_SERIES) && defined(USE_NFC)",
     "generate" : "jswrap_nfc_start",

@@ -116,6 +116,8 @@ void jswrap_nfc_URL(JsVar *url);
 void jswrap_nfc_pair(JsVar *key);
 void jswrap_nfc_androidApp(JsVar *appName);
 void jswrap_nfc_raw(JsVar *payload);
+void jswrap_nfc_set_atqa(JsVarInt payload);
+void jswrap_nfc_set_sak(JsVarInt payload);
 JsVar *jswrap_nfc_start(JsVar *payload);
 void jswrap_nfc_stop();
 void jswrap_nfc_send(JsVar *payload);

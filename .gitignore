@@ -77,3 +77,5 @@ arm-gnu-toolchain*
 *.jdebug
 *.code-workspace
 /espruino_embedded.*
+
+/venv
